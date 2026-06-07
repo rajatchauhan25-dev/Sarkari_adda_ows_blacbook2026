@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mock Test - Sarkari Adaa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;600;800&family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root { --bg: #f2f2f7; --crd: #ffffff; --txt: #1c1c1e; --p: #0071e3; --brd: rgba(0,0,0,0.08); --l-bg: #ffffff; }
+        body.dark { --bg: #000000; --crd: #1c1c1e; --txt: #f2f2f7; --brd: rgba(255,255,255,0.12); --l-bg: #2c2c2e; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none !important; }
+        body { margin: 0; font-family: 'Outfit', 'Anek Devanagari', sans-serif; background: var(--bg); color: var(--txt); height: 100vh; overflow: hidden; transition: 0.3s; }
+        header { position: fixed; top: 15px; left: 15px; right: 15px; height: 65px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 22px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; z-index: 100; border: 1px solid var(--brd); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body.dark header { background: rgba(28,28,30,0.85); }
+        .logo-box { height: 48px; width: 48px; background: var(--l-bg); border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--brd); box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .logo-box img { height: 85%; width: 85%; object-fit: contain; }
+        .head-actions { display: flex; align-items: center; gap: 8px; }
+        .timer { font-weight: 900; background: rgba(0,113,227,0.1); color: var(--p); padding: 8px 14px; border-radius: 14px; font-variant-numeric: tabular-nums; font-size: 14px; }
+        .icon-btn { background: var(--bg); border: none; color: var(--txt); width: 42px; height: 42px; border-radius: 14px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .sub-btn { background: var(--p); color: #fff; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 800; cursor: pointer; font-size: 13px; }
+        main { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 15px 110px; }
+        .q-card { background: var(--crd); width: 100%; max-width: 850px; height: 100%; border-radius: 35px; padding: clamp(20px, 5vw, 30px); display: flex; flex-direction: column; box-shadow: 0 15px 45px rgba(0,0,0,0.05); border: 1px solid var(--brd); }
+        .q-scroll { flex: 1; overflow-y: auto; scrollbar-width: none; } .q-scroll::-webkit-scrollbar { display: none; }
+        .q-label { font-size: 11px; font-weight: 900; color: var(--p); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
+        .q-text { font-size: clamp(18px, 4vw, 22px); font-weight: 700; line-height: 1.5; margin-bottom: 20px; }
+        .source-tag { font-size: 10px; background: rgba(128,128,128,0.08); padding: 6px 14px; border-radius: 10px; display: inline-block; margin-bottom: 25px; font-weight: 800; color: var(--p); border: 0.5px solid var(--brd); }
+        .options-grid { display: grid; gap: 12px; }
+        .opt { border: 2px solid var(--brd); padding: 18px; border-radius: 22px; cursor: pointer; display: flex; align-items: center; gap: 14px; font-weight: 600; font-size: 16px; transition: 0.2s; }
+        .opt.selected { border-color: var(--p); background: rgba(0,113,227,0.08); color: var(--p); }
+        .opt-circle { width: 22px; height: 22px; border: 2.5px solid var(--brd); border-radius: 50%; flex-shrink: 0; position: relative; transition: 0.2s; }
+        .opt.selected .opt-circle { background: var(--p); border-color: var(--p); }
+        .opt.selected .opt-circle::after { content:''; position:absolute; inset:5px; background:white; border-radius:50%; }
+        .nav-bar { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: var(--crd); padding: 10px 15px; border-radius: 25px; display: flex; gap: 15px; border: 1px solid var(--brd); box-shadow: 0 15px 40px rgba(0,0,0,0.1); z-index: 90; }
+        .nav-btn { background: var(--bg); border: none; color: var(--txt); width: 55px; height: 55px; border-radius: 18px; font-size: 24px; cursor: pointer; transition: 0.2s; }
+        .result-box { text-align: center; width: 100%; height: 100%; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; }
+        .res-header { background: var(--p); color: #fff; padding: 30px 20px; border-radius: 30px; margin-bottom: 20px; box-shadow: 0 15px 30px rgba(0,113,227,0.2); }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .res-val { font-size: 28px; font-weight: 900; } .res-lbl { font-size: 10px; font-weight: 800; opacity: 0.8; letter-spacing: 1px; }
+        .dots-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 10px; background: rgba(128,128,128,0.05); padding: 15px; border-radius: 25px; margin-bottom: 25px; border: 1px solid var(--brd); }
+        .dot { height: 48px; border: none; border-radius: 15px; font-family: 'Outfit'; font-weight: 800; background: #ddd; color: #333; cursor: pointer; transition: 0.2s; }
+        .dot.correct { background: #34c759; color: #fff; } .dot.wrong { background: #ff3b30; color: #fff; }
+        .footer-links { display: grid; gap: 10px; }
+        .link-btn { padding: 18px; border-radius: 20px; text-decoration: none; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: flex-end; justify-content: center; z-index: 1000; padding: 10px; }
+        .modal-content { background: var(--crd); width: 100%; max-width: 700px; border-radius: 35px; padding: clamp(20px, 5vw, 35px); max-height: 90vh; overflow-y: auto; position: relative; }
+        .sol-box { background: rgba(0,113,227,0.06); padding: 22px; border-radius: 24px; border-left: 6px solid var(--p); text-align: left; margin-top: 25px; font-size: 15px; line-height: 1.7; }
+        .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .sub-card { background: var(--crd); padding: 35px; border-radius: 40px; text-align: center; width: 100%; max-width: 380px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+        .sub-grid { background: rgba(0,113,227,0.05); padding: 20px; border-radius: 25px; margin: 20px 0; display: flex; justify-content: center; gap: 30px; }
+        .sub-item span { display: block; font-weight: 900; font-size: 22px; color: var(--p); }
+        .sub-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn-c { background: rgba(128,128,128,0.1); color: var(--txt); padding: 16px; border-radius: 18px; border: none; font-weight: 800; cursor: pointer; }
+        .btn-s { background: var(--p); color: #fff; padding: 16px; border-radius: 18px; border: none; font-weight: 800; cursor: pointer; }
+        .pop-up { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(8px); }
+        .pop-card { background: var(--crd); padding: 35px; border-radius: 40px; text-align: center; width: 100%; max-width: 340px; border: 1px solid var(--brd); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-box" id="logoLink"><img src="" id="mockLogo"></div>
+        <div class="head-actions">
+            <div class="timer" id="timer">00:00</div>
+            <button class="icon-btn" onclick="Engine.toggleMode()"><i class="ph-bold ph-moon" id="modeIco"></i></button>
+            <button class="sub-btn" onclick="Engine.showSub()">Submit</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="qArea" class="q-card"></div>
+        <div id="rArea" class="q-card" style="display:none"></div>
+    </main>
+
+    <div class="nav-bar" id="nav">
+        <button class="nav-btn" onclick="Engine.prev()"><i class="ph-bold ph-caret-left"></i></button>
+        <button class="nav-btn" onclick="Engine.next()"><i class="ph-bold ph-caret-right"></i></button>
+    </div>
+
+    <div class="modal" id="modal" onclick="if(event.target.id=='modal')Engine.closeModal()">
+        <div class="modal-content" id="mContent"></div>
+    </div>
+
+    <div class="sub-modal" id="subModal">
+        <div class="sub-card">
+            <i class="ph-bold ph-seal-check" style="font-size:50px; color:var(--p); margin-bottom:15px;"></i>
+            <h2 style="margin:0;font-weight:900;font-size:24px;">Submit Mock?</h2>
+            <p style="margin:5px 0 0;font-size:14px;font-weight:600;opacity:0.6;">Are you sure you want to finish?</p>
+            <div class="sub-grid">
+                <div class="sub-item"><span id="subAns">0</span><label style="font-size:10px;font-weight:800;opacity:0.7;">ANSWERED</label></div>
+                <div class="sub-item"><span id="subLeft">0</span><label style="font-size:10px;font-weight:800;opacity:0.7;">LEFT</label></div>
+            </div>
+            <div class="sub-btns">
+                <button class="btn-c" onclick="Engine.hideSub()">Review</button>
+                <button class="btn-s" onclick="Engine.submit()">Yes, Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop-up" id="popUp">
+        <div class="pop-card">
+            <i class="pop-icon" id="popIco" style="font-size:65px; margin-bottom:15px; display:block;"></i>
+            <h2 id="popTit" style="margin:0 0 10px; font-weight:900;">Join Us</h2>
+            <p id="popSub" style="margin:0 0 25px; font-weight:600; opacity:0.7;">Get latest updates on your mobile!</p>
+            <a href="" id="popBtn" target="_blank" onclick="Engine.closePop()" class="link-btn">Join Channel</a>
+            <button onclick="Engine.closePop()" style="background:none; border:none; margin-top:20px; color:#888; font-weight:800; cursor:pointer; font-size:14px;">Maybe Later</button>
+        </div>
+    </div>
+
+    <script>
+        const _E = JSON.parse(decodeURIComponent(escape(atob("eyJxdWVzdGlvbnMiOlt7InEiOiIxLiBBIGNpcmN1bGFyIGRpYWdyYW0gcmVwcmVzZW50aW5nIHRoZSB0d2VsdmUgYXN0cm9sb2dpY2FsIHNpZ25zIiwibyI6WyJab2RpYWMiLCJaZXJvIiwiWmVuaXRoIiwiWm9uZSJdLCJjIjoxLCJzIjoiVGhlcmUgYXJlIHR3ZWx2ZSBzaWducyBpbiB0aGUgV2VzdGVybiB6b2RpYWMuIOCkrOCkvuCksOCkuSDgpLDgpL7gpLbgpL/gpK/gpYvgpIIg4KSV4KWLIOCkpuCksOCljeCktuCkvuCkqOClhyDgpLXgpL7gpLLgpL4g4KSk4KS+4KSw4KS+LeCkruCkguCkoeCksiDgpK/gpL4g4KSw4KS+4KS24KS/4KSa4KSV4KWN4KSw4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IlRoZSBoaWdoZXN0IHBvaW50IiwibyI6WyJBYnlzcyIsIkhvcml6b24iLCJOYWRpciIsIlplbml0aCJdLCJjIjo0LCJzIjoiVGhlIHN1biByZWFjaGVzIGl0cyB6ZW5pdGggYXQgbWlkZGF5LiDgpJXgpL/gpLjgpYAg4KSa4KWA4KSc4KS8IOCkleCkviDgpLbgpL/gpJbgpLAg4KSv4KS+IOCkuOCkrOCkuOClhyDgpIrgpIHgpJrgpL4g4KSs4KS/4KSC4KSm4KWB4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IlRoZSBzY2llbnRpZmljIHN0dWR5IG9mIHRoZSBiZWhhdmlvdXIsIHN0cnVjdHVyZSwgYW5kIGRpc3RyaWJ1dGlvbiBvZiBhbmltYWxzIiwibyI6WyJFY29sb2d5IiwiWm9vbG9neSIsIkJvdGFueSIsIkFuYXRvbXkiXSwiYyI6MiwicyI6Ilpvb2xvZ3kgaXMgYSBicmFuY2ggb2YgYmlvbG9neSB0aGF0IGZvY3VzZXMgb24gdGhlIGFuaW1hbCBraW5nZG9tLiDgpJzgpILgpKTgpYHgpJPgpIIg4KSv4KS+IOCkquCljeCksOCkvuCko+Ckv+Ckr+Cli+CkgiDgpJXgpL4g4KS14KWI4KSc4KWN4KSe4KS+4KSo4KS/4KSVIOCkheCkp+CljeCkr+Ckr+CkqCAo4KSc4KSC4KSk4KWBIOCkteCkv+CknOCljeCknuCkvuCkqCngpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiQSBwZXJzb24gd2hvIHN0dWRpZXMgYW5pbWFscyIsIm8iOlsiQm90YW5pc3QiLCJab29sb2dpc3QiLCJHZW9sb2dpc3QiLCJCaW9sb2dpc3QiXSwiYyI6MiwicyI6IlRoZSB6b29sb2dpc3Qgc3BlbnQgeWVhcnMgc3R1ZHlpbmcgdGhlIG1pZ3JhdGlvbiBwYXR0ZXJucyBvZiBlbGVwaGFudHMuIOCknOCkvuCkqOCkteCksOCli+CkgiDgpJXgpYAg4KSs4KSo4KS+4KS14KSfIOCklOCksCDgpLXgpY3gpK/gpLXgpLngpL7gpLAg4KSV4KS+IOCkheCkp+CljeCkr+Ckr+CkqCDgpJXgpLDgpKjgpYcg4KS14KS+4KSy4KS+IOCkteCkv+CktuClh+Ckt+CknOCljeCknuClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJBIHBsYWNlIHdoZXJlIHdpbGQgYW5pbWFscyBhcmUga2VwdCBmb3IgcHVibGljIGRpc3BsYXksIHN0dWR5LCBvciBjb25zZXJ2YXRpb24iLCJvIjpbIkF2aWFyeSIsIlpvbyIsIlN0YWJsZSIsIkFxdWFyaXVtIl0sImMiOjIsInMiOiJNYW55IGVuZGFuZ2VyZWQgc3BlY2llcyBhcmUgYnJlZCBpbiB0aGUgem9vIHRvIHByZXZlbnQgZXh0aW5jdGlvbi4g4KS14KS5IOCkuOCljeCkpeCkvuCkqCDgpJzgpLngpL7gpIEg4KSc4KSC4KSX4KSy4KWAIOCknOCkvuCkqOCkteCksOCli+CkgiDgpJXgpYsg4KSc4KSo4KSk4KS+IOCkleClhyDgpKbgpYfgpJbgpKjgpYcg4KSV4KWHIOCksuCkv+CkjyDgpLDgpJbgpL4g4KSc4KS+4KSk4KS+IOCkueCliCAo4KSa4KS/4KSh4KS84KS/4KSv4KS+4KSY4KSwKeClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJBIHBlcnNvbiB3aG8gaXMgZmFuYXRpY2FsIGFuZCB1bmNvbXByb21pc2luZyBpbiBwdXJzdWl0IG9mIHRoZWlyIHJlbGlnaW91cyBvciBwb2xpdGljYWwgaWRlYWxzIiwibyI6WyJaZWFsb3QiLCJaZWFsIiwiWmVuaXRoIiwiWmFueSJdLCJjIjoxLCJzIjoiQSByZWxpZ2lvdXMgemVhbG90IHJlZnVzZXMgdG8gYWNjZXB0IGFueSBvdGhlciBwb2ludCBvZiB2aWV3LiDgpLXgpLkg4KS14KWN4KSv4KSV4KWN4KSk4KS/IOCknOCliyDgpIXgpKrgpKjgpYcg4KS14KS/4KS24KWN4KS14KS+4KS44KWL4KSCIOCkr+CkviDgpKfgpLDgpY3gpK4g4KSV4KWHIOCkquCljeCksOCkpOCkvyDgpKzgpLngpYHgpKQg4KSF4KSn4KS/4KSVIOCkleCkn+CljeCkn+CksCAoZmFuYXRpY2FsKSDgpLngpYvgpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiVGhlIGdlbmVyYWwgaW50ZWxsZWN0dWFsLCBtb3JhbCwgYW5kIGN1bHR1cmFsIGNsaW1hdGUgb2YgYW4gZXJhIGlzIGNhbGxlZDoiLCJvIjpbIlplbml0aCIsIlplaXRnZWlzdCIsIlplcGh5ciIsIlplc3QiXSwiYyI6MiwicyI6IlplaXRnZWlzdCByZWZlcnMgdG8gdGhlIGRlZmluaW5nIHNwaXJpdCBvciBtb29kIG9mIGEgcGFydGljdWxhciBwZXJpb2Qgb2YgaGlzdG9yeS4iLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiQSBzb2Z0IGdlbnRsZSBicmVlemUgKG5hbWVkIGFmdGVyIHRoZSBHcmVlayBnb2Qgb2YgdGhlIHdlc3Qgd2luZCkgaXMgY2FsbGVkOiIsIm8iOlsiWmVhbG90IiwiWmVybyIsIlplcGh5ciIsIlplbml0aCJdLCJjIjozLCJzIjoiWmVwaHlyIGlzIGEgc29mdCwgZ2VudGxlIGJyZWV6ZSwgZGVyaXZlZCBmcm9tIFplcGh5cnVzLCB0aGUgR3JlZWsgZ29kIG9mIHRoZSB3ZXN0IHdpbmQuIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9XSwic291cmNlIjoiWiBXT1JEIC0gT1dTICggV09SRCBBREFBIFBERnMgKSIsImxpbmtzIjp7IndhIjoiaHR0cHM6Ly93aGF0c2FwcC5jb20vY2hhbm5lbC8wMDI5VmJDV0hsQUFlNVZpeWhvVGp5MjQiLCJ0ZyI6Imh0dHBzOi8vdC5tZS9TYXJrYXJpQWRhYSIsImxvZ28iOiJodHRwczovL2kuaWJiLmNvLzlIN3ltTnltL2ZpbGUtMDAwMDAwMDA5ZDMwNzIwOGIwZmU3OGUwYzRhNDI2ZGYucG5nIn19"))));
+        const _D = _E.questions; const _L = _E.links; const _S = _E.source;
+        let _idx=0, _ans={}, _isSub=false, _t=160, _popS=new Set();
+
+        const _sh = (a) => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a; };
+        _sh(_D);
+        _D.forEach(q => {
+            let combined = q.o.map((o,i)=>({o, c: i+1==q.c}));
+            _sh(combined);
+            q.o = combined.map(x=>x.o);
+            q.c = combined.findIndex(x=>x.c)+1;
+        });
+
+        const Engine = {
+            init: () => {
+                document.getElementById('mockLogo').src = _L.logo;
+                document.getElementById('logoLink').onclick = () => window.open(_L.wa, '_blank');
+                Engine.render();
+                setInterval(Engine.tick, 1000);
+            },
+            render: () => {
+                const q = _D[_idx];
+                let h = `<div class="q-label">Question ${_idx+1} / ${_D.length}</div>
+                <div class="q-scroll">
+                    <div class="q-text" style="font-family:'Outfit','Anek Devanagari'">${q.q}</div>
+                    <div class="source-tag">${_S}</div>
+                    <div class="options-grid">${q.o.map((o,i)=>`<div class="opt ${_ans[_idx]==i+1?'selected':''}" onclick="Engine.pick(${i+1})"><div class="opt-circle"></div>${o}</div>`).join('')}</div>
+                </div>`;
+                document.getElementById('qArea').innerHTML = h;
+                Engine.checkPop();
+            },
+            pick: (v) => { if(!_isSub){ _ans[_idx]=(_ans[_idx]==v?null:v); Engine.render(); } },
+            next: () => { if(_idx < _D.length-1){ _idx++; Engine.render(); } },
+            prev: () => { if(_idx > 0){ _idx--; Engine.render(); } },
+            tick: () => { if(!_isSub && _t > 0){ _t--; let m=Math.floor(_t/60), s=_t%60; document.getElementById('timer').innerText = (m<10?'0':'')+m+":"+(s<10?'0':'')+s; } },
+            toggleMode: () => {
+                document.body.classList.toggle('dark');
+                const isD = document.body.classList.contains('dark');
+                document.getElementById('modeIco').className = isD ? 'ph-bold ph-sun' : 'ph-bold ph-moon';
+            },
+            showSub: () => {
+                let ans = Object.keys(_ans).filter(k=>_ans[k]!==null).length;
+                document.getElementById('subAns').innerText = ans;
+                document.getElementById('subLeft').innerText = _D.length - ans;
+                document.getElementById('subModal').style.display = 'flex';
+            },
+            hideSub: () => document.getElementById('subModal').style.display = 'none',
+            submit: () => {
+                _isSub = true; Engine.hideSub();
+                document.getElementById('qArea').style.display = 'none';
+                document.getElementById('nav').style.display = 'none';
+                let c=0, w=0, u=0; _D.forEach((q,i)=>{ if(!_ans[i]) u++; else if(_ans[i]==q.c) c++; else w++; });
+                let h = `<div class="result-box">
+                    <div class="res-header">
+                        <h2 style="margin:0;font-weight:900;">Mock Completed</h2>
+                        <div class="res-grid">
+                            <div><div class="res-val">${c}</div><div class="res-lbl">CORRECT</div></div>
+                            <div><div class="res-val">${w}</div><div class="res-lbl">WRONG</div></div>
+                            <div><div class="res-val">${u}</div><div class="res-lbl">SKIPPED</div></div>
+                        </div>
+                    </div>
+                    <div class="dots-container">${_D.map((_,i)=>`<button class="dot ${!_ans[i]?'':(_ans[i]==_D[i].c?'correct':'wrong')}" onclick="Engine.anal(${i})">${i+1}</button>`).join('')}</div>
+                    <div class="footer-links">
+                        <a href="javascript:location.reload()" class="link-btn" style="background:#000">Retake Mock</a>
+                        <a href="${_L.wa}" target="_blank" class="link-btn" style="background:#25d366"><i class="ph-fill ph-whatsapp-logo"></i> WhatsApp Channel</a>
+                        <a href="${_L.tg}" target="_blank" class="link-btn" style="background:#0088cc"><i class="ph-fill ph-telegram-logo"></i> Telegram Channel</a>
+                    </div>
+                    <div style="margin-top:25px; font-weight:800; opacity:0.4; font-size:12px; letter-spacing:1px; font-family:'Outfit'">POWERED BY @SARKARIADAA</div>
+                </div>`;
+                document.getElementById('rArea').innerHTML = h;
+                document.getElementById('rArea').style.display = 'block';
+            },
+            anal: (i) => {
+                const q = _D[i], ua = _ans[i];
+                let h = `<div class="modal-head"><h3 style="margin:0;font-weight:900;">Analysis Q${i+1}</h3><i class="ph-bold ph-x-circle" style="font-size:32px;cursor:pointer;opacity:0.6" onclick="Engine.closeModal()"></i></div>
+                <div class="q-text" style="font-size:19px">${q.q}</div>
+                <div class="options-grid">${q.o.map((o,p)=>{
+                    let st = '';
+                    if(p+1==q.c) st = 'border-color:#34c759; background:rgba(52,199,89,0.1); color:#34c759;';
+                    else if(ua==p+1) st = 'border-color:#ff3b30; background:rgba(255,59,48,0.1); color:#ff3b30;';
+                    return `<div class="opt" style="${st}">${o}</div>`;
+                }).join('')}</div>
+                <div class="sol-box"><b>Explanation:</b><br><div style="margin-top:10px">${q.s}</div></div>`;
+                document.getElementById('mContent').innerHTML = h; document.getElementById('modal').style.display = 'flex';
+            },
+            closeModal: () => document.getElementById('modal').style.display = 'none',
+            checkPop: () => {
+                let p = Math.floor((_idx/_D.length)*100);
+                if((p==25 || p==60 || p==90) && !_popS.has(p)){
+                    _popS.add(p); const isW = Math.random() > 0.5;
+                    document.getElementById('popIco').className = isW ? "ph-fill ph-whatsapp-logo" : "ph-fill ph-telegram-logo";
+                    document.getElementById('popIco').style.color = isW ? "#25d366" : "#0088cc";
+                    document.getElementById('popTit').innerText = isW ? "WhatsApp Channel" : "Telegram Channel";
+                    document.getElementById('popBtn').href = isW ? _L.wa : _L.tg;
+                    document.getElementById('popBtn').style.background = isW ? "#25d366" : "#0088cc";
+                    document.getElementById('popUp').style.display = 'flex';
+                }
+            },
+            closePop: () => document.getElementById('popUp').style.display = 'none'
+        };
+        Engine.init();
+    </script>
+</body>
+</html>

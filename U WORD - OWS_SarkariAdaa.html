@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mock Test - Sarkari Adaa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;600;800&family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root { --bg: #f2f2f7; --crd: #ffffff; --txt: #1c1c1e; --p: #0071e3; --brd: rgba(0,0,0,0.08); --l-bg: #ffffff; }
+        body.dark { --bg: #000000; --crd: #1c1c1e; --txt: #f2f2f7; --brd: rgba(255,255,255,0.12); --l-bg: #2c2c2e; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none !important; }
+        body { margin: 0; font-family: 'Outfit', 'Anek Devanagari', sans-serif; background: var(--bg); color: var(--txt); height: 100vh; overflow: hidden; transition: 0.3s; }
+        header { position: fixed; top: 15px; left: 15px; right: 15px; height: 65px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 22px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; z-index: 100; border: 1px solid var(--brd); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        body.dark header { background: rgba(28,28,30,0.85); }
+        .logo-box { height: 48px; width: 48px; background: var(--l-bg); border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--brd); box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .logo-box img { height: 85%; width: 85%; object-fit: contain; }
+        .head-actions { display: flex; align-items: center; gap: 8px; }
+        .timer { font-weight: 900; background: rgba(0,113,227,0.1); color: var(--p); padding: 8px 14px; border-radius: 14px; font-variant-numeric: tabular-nums; font-size: 14px; }
+        .icon-btn { background: var(--bg); border: none; color: var(--txt); width: 42px; height: 42px; border-radius: 14px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .sub-btn { background: var(--p); color: #fff; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 800; cursor: pointer; font-size: 13px; }
+        main { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 15px 110px; }
+        .q-card { background: var(--crd); width: 100%; max-width: 850px; height: 100%; border-radius: 35px; padding: clamp(20px, 5vw, 30px); display: flex; flex-direction: column; box-shadow: 0 15px 45px rgba(0,0,0,0.05); border: 1px solid var(--brd); }
+        .q-scroll { flex: 1; overflow-y: auto; scrollbar-width: none; } .q-scroll::-webkit-scrollbar { display: none; }
+        .q-label { font-size: 11px; font-weight: 900; color: var(--p); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
+        .q-text { font-size: clamp(18px, 4vw, 22px); font-weight: 700; line-height: 1.5; margin-bottom: 20px; }
+        .source-tag { font-size: 10px; background: rgba(128,128,128,0.08); padding: 6px 14px; border-radius: 10px; display: inline-block; margin-bottom: 25px; font-weight: 800; color: var(--p); border: 0.5px solid var(--brd); }
+        .options-grid { display: grid; gap: 12px; }
+        .opt { border: 2px solid var(--brd); padding: 18px; border-radius: 22px; cursor: pointer; display: flex; align-items: center; gap: 14px; font-weight: 600; font-size: 16px; transition: 0.2s; }
+        .opt.selected { border-color: var(--p); background: rgba(0,113,227,0.08); color: var(--p); }
+        .opt-circle { width: 22px; height: 22px; border: 2.5px solid var(--brd); border-radius: 50%; flex-shrink: 0; position: relative; transition: 0.2s; }
+        .opt.selected .opt-circle { background: var(--p); border-color: var(--p); }
+        .opt.selected .opt-circle::after { content:''; position:absolute; inset:5px; background:white; border-radius:50%; }
+        .nav-bar { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: var(--crd); padding: 10px 15px; border-radius: 25px; display: flex; gap: 15px; border: 1px solid var(--brd); box-shadow: 0 15px 40px rgba(0,0,0,0.1); z-index: 90; }
+        .nav-btn { background: var(--bg); border: none; color: var(--txt); width: 55px; height: 55px; border-radius: 18px; font-size: 24px; cursor: pointer; transition: 0.2s; }
+        .result-box { text-align: center; width: 100%; height: 100%; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; }
+        .res-header { background: var(--p); color: #fff; padding: 30px 20px; border-radius: 30px; margin-bottom: 20px; box-shadow: 0 15px 30px rgba(0,113,227,0.2); }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .res-val { font-size: 28px; font-weight: 900; } .res-lbl { font-size: 10px; font-weight: 800; opacity: 0.8; letter-spacing: 1px; }
+        .dots-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 10px; background: rgba(128,128,128,0.05); padding: 15px; border-radius: 25px; margin-bottom: 25px; border: 1px solid var(--brd); }
+        .dot { height: 48px; border: none; border-radius: 15px; font-family: 'Outfit'; font-weight: 800; background: #ddd; color: #333; cursor: pointer; transition: 0.2s; }
+        .dot.correct { background: #34c759; color: #fff; } .dot.wrong { background: #ff3b30; color: #fff; }
+        .footer-links { display: grid; gap: 10px; }
+        .link-btn { padding: 18px; border-radius: 20px; text-decoration: none; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: flex-end; justify-content: center; z-index: 1000; padding: 10px; }
+        .modal-content { background: var(--crd); width: 100%; max-width: 700px; border-radius: 35px; padding: clamp(20px, 5vw, 35px); max-height: 90vh; overflow-y: auto; position: relative; }
+        .sol-box { background: rgba(0,113,227,0.06); padding: 22px; border-radius: 24px; border-left: 6px solid var(--p); text-align: left; margin-top: 25px; font-size: 15px; line-height: 1.7; }
+        .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .sub-card { background: var(--crd); padding: 35px; border-radius: 40px; text-align: center; width: 100%; max-width: 380px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+        .sub-grid { background: rgba(0,113,227,0.05); padding: 20px; border-radius: 25px; margin: 20px 0; display: flex; justify-content: center; gap: 30px; }
+        .sub-item span { display: block; font-weight: 900; font-size: 22px; color: var(--p); }
+        .sub-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn-c { background: rgba(128,128,128,0.1); color: var(--txt); padding: 16px; border-radius: 18px; border: none; font-weight: 800; cursor: pointer; }
+        .btn-s { background: var(--p); color: #fff; padding: 16px; border-radius: 18px; border: none; font-weight: 800; cursor: pointer; }
+        .pop-up { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(8px); }
+        .pop-card { background: var(--crd); padding: 35px; border-radius: 40px; text-align: center; width: 100%; max-width: 340px; border: 1px solid var(--brd); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-box" id="logoLink"><img src="" id="mockLogo"></div>
+        <div class="head-actions">
+            <div class="timer" id="timer">00:00</div>
+            <button class="icon-btn" onclick="Engine.toggleMode()"><i class="ph-bold ph-moon" id="modeIco"></i></button>
+            <button class="sub-btn" onclick="Engine.showSub()">Submit</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="qArea" class="q-card"></div>
+        <div id="rArea" class="q-card" style="display:none"></div>
+    </main>
+
+    <div class="nav-bar" id="nav">
+        <button class="nav-btn" onclick="Engine.prev()"><i class="ph-bold ph-caret-left"></i></button>
+        <button class="nav-btn" onclick="Engine.next()"><i class="ph-bold ph-caret-right"></i></button>
+    </div>
+
+    <div class="modal" id="modal" onclick="if(event.target.id=='modal')Engine.closeModal()">
+        <div class="modal-content" id="mContent"></div>
+    </div>
+
+    <div class="sub-modal" id="subModal">
+        <div class="sub-card">
+            <i class="ph-bold ph-seal-check" style="font-size:50px; color:var(--p); margin-bottom:15px;"></i>
+            <h2 style="margin:0;font-weight:900;font-size:24px;">Submit Mock?</h2>
+            <p style="margin:5px 0 0;font-size:14px;font-weight:600;opacity:0.6;">Are you sure you want to finish?</p>
+            <div class="sub-grid">
+                <div class="sub-item"><span id="subAns">0</span><label style="font-size:10px;font-weight:800;opacity:0.7;">ANSWERED</label></div>
+                <div class="sub-item"><span id="subLeft">0</span><label style="font-size:10px;font-weight:800;opacity:0.7;">LEFT</label></div>
+            </div>
+            <div class="sub-btns">
+                <button class="btn-c" onclick="Engine.hideSub()">Review</button>
+                <button class="btn-s" onclick="Engine.submit()">Yes, Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pop-up" id="popUp">
+        <div class="pop-card">
+            <i class="pop-icon" id="popIco" style="font-size:65px; margin-bottom:15px; display:block;"></i>
+            <h2 id="popTit" style="margin:0 0 10px; font-weight:900;">Join Us</h2>
+            <p id="popSub" style="margin:0 0 25px; font-weight:600; opacity:0.7;">Get latest updates on your mobile!</p>
+            <a href="" id="popBtn" target="_blank" onclick="Engine.closePop()" class="link-btn">Join Channel</a>
+            <button onclick="Engine.closePop()" style="background:none; border:none; margin-top:20px; color:#888; font-weight:800; cursor:pointer; font-size:14px;">Maybe Later</button>
+        </div>
+    </div>
+
+    <script>
+        const _E = JSON.parse(decodeURIComponent(escape(atob("eyJxdWVzdGlvbnMiOlt7InEiOiIxLiBGb3VuZCBhbGwgb3ZlciB0aGUgd29ybGQiLCJvIjpbIlVuaWZvcm0iLCJVbmlxdWUiLCJVbml2ZXJzYWwiLCJVbnVzdWFsIl0sImMiOjMsInMiOiJNdXNpYyBpcyBvZnRlbiBjYWxsZWQgYSB1bml2ZXJzYWwgbGFuZ3VhZ2UuIOCkteCkuSDgpJrgpYDgpJzgpLwg4KSc4KWLIOCkquClguCksOClgCDgpKbgpYHgpKjgpL/gpK/gpL4g4KSu4KWH4KSCIOCkteCljeCkr+CkvuCkquCljeCkpCDgpK/gpL4g4KSu4KS+4KSo4KWN4KSvIOCkueCliyAo4KS44KS+4KSw4KWN4KS14KSt4KWM4KSu4KS/4KSVKeClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJOb3QgeWV0IHVzZWQgb3IgZGV2ZWxvcGVkIiwibyI6WyJVbnRhcHBlZCIsIlVzZWQiLCJVbndpZWxkeSIsIlVzZWZ1bCJdLCJjIjoxLCJzIjoiVGhlIGNvdW50cnkgaGFzIHZhc3QgdW50YXBwZWQgbmF0dXJhbCByZXNvdXJjZXMuIOCknOCkv+CkuOClhyDgpIXgpK3gpYAg4KSk4KSVIOCkieCkquCkr+Cli+CklyDgpK7gpYfgpIIg4KSoIOCksuCkvuCkr+CkviDgpJfgpK/gpL4g4KS54KWLIOCkr+CkviDgpLXgpL/gpJXgpLjgpL/gpKQg4KSoIOCkleCkv+Ckr+CkviDgpJfgpK/gpL4g4KS54KWL4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IkRpZmZpY3VsdCB0byBoYW5kbGUgb3IgbWFuYWdlIGR1ZSB0byBzaXplIG9yIHdlaWdodCIsIm8iOlsiVW5pbml0aWF0ZWQiLCJVbnNjcnVwdWxvdXMiLCJVbndpZWxkeSIsIlVuYW5pbW91cyJdLCJjIjozLCJzIjoiVGhlIGhlYXZ5IHNvZmEgd2FzIHF1aXRlIHVud2llbGR5IHRvIG1vdmUgdXAgdGhlIHN0YWlycy4g4KSc4KWLIOCkmuClgOCknOCkvCDgpIXgpKrgpKjgpYcg4KSG4KSV4KS+4KSwIOCkr+CkviDgpK3gpL7gpLAg4KSV4KWHIOCkleCkvuCksOCkoyDgpLjgpILgpK3gpL7gpLLgpKjgpYcg4KSu4KWH4KSCIOCkleCkoOCkv+CkqCDgpLngpYvgpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiRXhjZXNzaXZlbHkgZm9uZCBvZiBvciBzdWJtaXNzaXZlIHRvIG9uZSdzIHdpZmUiLCJvIjpbIkZhaXRoZnVsIiwiVXhvcmlvdXMiLCJMb3ZpbmciLCJEb21pbmFudCJdLCJjIjoyLCJzIjoiSGUgaXMgcXVpdGUgdXhvcmlvdXMgYW5kIGZvbGxvd3MgYWxsIGhpcyB3aWZlJ3MgaW5zdHJ1Y3Rpb25zLiDgpJzgpYsg4KSF4KSq4KSo4KWAIOCkquCkpOCljeCkqOClgCDgpJXgpL4g4KSs4KS54KWB4KSkIOCknOCkvOCljeCkr+CkvuCkpuCkviDgpJXgpLngpKjgpL4g4KSu4KS+4KSo4KSk4KS+IOCkueCliyAo4KSc4KWL4KSw4KWCIOCkleCkviDgpJfgpYHgpLLgpL7gpK4p4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IkhhdmluZyBubyBtb3JhbCBwcmluY2lwbGVzIiwibyI6WyJVbndpZWxkeSIsIkhvbmVzdCIsIlVuc2NydXB1bG91cyIsIkV0aGljYWwiXSwiYyI6MywicyI6IlRoZSB1bnNjcnVwdWxvdXMgYnVzaW5lc3NtYW4gY2hlYXRlZCBtYW55IGlubm9jZW50IHBlb3BsZS4g4KS14KS5IOCkteCljeCkr+CkleCljeCkpOCkvyDgpJzgpL/gpLjgpJXgpYAg4KSV4KWL4KSIIOCkqOCliOCkpOCkv+CkleCkpOCkviDgpK/gpL4g4KS44KS/4KSm4KWN4KSn4KS+4KSC4KSkIOCkqCDgpLngpYvgpIIgKOCkheCkqOCliOCkpOCkv+CklSngpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiSW4gYSBtYW5uZXIgZnVsbHkgYWdyZWVkIHVwb24gYnkgYWxsIiwibyI6WyJVbml2ZXJzYWxseSIsIlVuaWZvcm1seSIsIlVuaXF1ZWx5IiwiVW5hbmltb3VzbHkiXSwiYyI6NCwicyI6IlRoZSByZXNvbHV0aW9uIHdhcyBwYXNzZWQgdW5hbmltb3VzbHkgYnkgdGhlIGNvbW1pdHRlZS4g4KSQ4KS44KWAIOCkuOCljeCkpeCkv+CkpOCkvyDgpJzgpLngpL7gpIEg4KS44KSt4KWAIOCksuCli+CklyDgpKrgpYLgpLDgpY3gpKPgpKTgpIMg4KS44KS54KSu4KSkIOCkueCli+CkgiAo4KS44KSw4KWN4KS14KS44KSu4KWN4KSu4KSk4KS/IOCkuOClhyngpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiQSBteXRob2xvZ2ljYWwgYW5pbWFsIHdpdGggb25lIGhvcm4gb24gaXRzIGZvcmVoZWFkIiwibyI6WyJHcmlmZmluIiwiVW5pY29ybiIsIlBlZ2FzdXMiLCJIeWRyYSJdLCJjIjoyLCJzIjoiVW5pY29ybnMgYXJlIHBvcHVsYXIgY2hhcmFjdGVycyBpbiBjaGlsZHJlbidzIGZhaXJ5IHRhbGVzLiDgpI/gpJUg4KS44KWA4KSC4KSXIOCkteCkvuCksuCkviDgpJjgpYvgpZzgpYcg4KSc4KWI4KS44KS+IOCkleCkvuCksuCljeCkquCkqOCkv+CklSDgpKrgpLbgpYHgpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiQSBsYXJnZSB2YXNlIHRoYXQgdXN1YWxseSBoYXMgYSBwZWRlc3RhbCBvciBmZWV0IiwibyI6WyJCYXNpbiIsIkN1cCIsIkJ1Y2tldCIsIlVybiJdLCJjIjo0LCJzIjoiVGhlIGFuY2llbnQgdXJuIHdhcyBkZWNvcmF0ZWQgd2l0aCBiZWF1dGlmdWwgcGF0dGVybnMuIOCkj+CklSDgpKzgpZzgpL4g4KS44KSc4KS+4KS14KSf4KWAIOCkrOCksOCljeCkpOCkqCDgpK/gpL4g4KSV4KSy4KS24KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IkFuIGltYWdpbmVkIHBlcmZlY3Qgc29jaWV0eSB3aGVyZSBldmVyeXRoaW5nIGlzIGlkZWFsIiwibyI6WyJIZWF2ZW4iLCJVdG9waWEiLCJQYXJhZGlzZSIsIklzbGFuZCJdLCJjIjoyLCJzIjoiQSB3b3JsZCB3aXRob3V0IGNyaW1lIGlzIGEgYmVhdXRpZnVsIHV0b3BpYS4g4KSP4KSVIOCkkOCkuOCkviDgpIbgpKbgpLDgpY3gpLYg4KS44KSu4KS+4KScIOCknOCkv+CkuOCkleClgCDgpJXgpYfgpLXgpLIg4KSV4KSy4KWN4KSq4KSo4KS+IOCkleClgCDgpJzgpL4g4KS44KSV4KSk4KWAIOCkueCliOClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJPbmUgd2hvIGxlbmRzIG1vbmV5IGF0IHVucmVhc29uYWJseSBoaWdoIGludGVyZXN0IiwibyI6WyJCcm9rZXIiLCJVc3VyZXIiLCJUcmFkZXIiLCJCYW5rZXIiXSwiYyI6MiwicyI6IkluIHRoZSBzdG9yeSwgdGhlIHBvb3IgZmFybWVyIHdhcyB0cmFwcGVkIGJ5IGEgZ3JlZWR5IHVzdXJlci4g4KS14KS5IOCkteCljeCkr+CkleCljeCkpOCkvyDgpJzgpYsg4KSs4KS54KWB4KSkIOCkiuCkgeCkmuClgCDgpKzgpY3gpK/gpL7gpJwg4KSm4KSwIOCkquCksCDgpKrgpYjgpLjgpYcg4KSJ4KSn4KS+4KSwIOCkpuClh+CkpOCkviDgpLngpYggKOCkuOClguCkpuCkluCli+CksCngpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiVGhlIHVwd2FyZCBmb3JjZSB0aGF0IGEgZmx1aWQgZXhlcnRzIG9uIGEgYm9keSBmbG9hdGluZyBpbiBpdCIsIm8iOlsiVXB0aHJ1c3QiLCJHcmF2aXR5IiwiRnJpY3Rpb24iLCJUZW5zaW9uIl0sImMiOjEsInMiOiJVcHRocnVzdCBpcyB0aGUgcmVhc29uIHdoeSBvYmplY3RzIGZlZWwgbGlnaHRlciBpbiB3YXRlci4g4KSV4KS/4KS44KWAIOCkpOCksOCksiDgpKrgpKbgpL7gpLDgpY3gpKUg4KSm4KWN4KS14KS+4KSw4KS+IOCkiuCkquCksCDgpJXgpYAg4KST4KSwIOCksuCkl+CkvuCkr+CkviDgpJzgpL7gpKjgpYcg4KS14KS+4KSy4KS+IOCkrOCksiAo4KSJ4KSk4KWN4KSq4KWN4KSy4KS+4KS14KSoIOCkrOCksingpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiQSByYXBpZCBvciBzdWRkZW4gcmlzZSIsIm8iOlsiVXBzdXJnZSIsIlVwZ3JhZGUiLCJVcHRocnVzdCIsIlVwZGF0ZSJdLCJjIjoxLCJzIjoiVGhlcmUgaGFzIGJlZW4gYW4gdXBzdXJnZSBpbiBpbnRlcmVzdCBpbiBvcmdhbmljIGZhcm1pbmcuIOCkleCkv+CkuOClgCDgpJrgpYDgpJzgpLwg4KSV4KWAIOCkruCkvuCkpOCljeCksOCkviDgpK/gpL4g4KSk4KWA4KS14KWN4KSw4KSk4KS+IOCkruClh+CkgiDgpIXgpJrgpL7gpKjgpJUg4KS54KWL4KSo4KWHIOCkteCkvuCksuClgCDgpKTgpYfgpZsg4KS14KWD4KSm4KWN4KSn4KS/4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IlRoZSBxdWFsaXR5IG9mIGJlaW5nIHVzZWZ1bCIsIm8iOlsiVXRvcGlhIiwiVXN1cnkiLCJVbml0eSIsIlV0aWxpdHkiXSwiYyI6NCwicyI6IldlIHNob3VsZCBjb25zaWRlciB0aGUgdXRpbGl0eSBvZiB0aGUgcHJvZHVjdCBiZWZvcmUgYnV5aW5nIGl0LiDgpJXgpL/gpLjgpYAg4KSa4KWA4KSc4KS8IOCkleClhyDgpJXgpL7gpK4g4KSG4KSo4KWHIOCkleClgCDgpLXgpL/gpLbgpYfgpLfgpKTgpL4g4KSv4KS+IOCkieCkuOCkleClgCDgpIngpKrgpK/gpYvgpJfgpL/gpKTgpL7gpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiTm90IGhhdmluZyBrbm93bGVkZ2Ugb3IgZXhwZXJpZW5jZSBvZiBhIHBhcnRpY3VsYXIgc3ViamVjdCBvciBhY3Rpdml0eSIsIm8iOlsiVW5hbmltb3VzIiwiVW5pbml0aWF0ZWQiLCJVbndpZWxkeSIsIlVucHJlY2VkZW50ZWQiXSwiYyI6MiwicyI6IlRvIHRoZSB1bmluaXRpYXRlZCwgdGhlIHRlY2huaWNhbCBzeW1ib2xzIGNhbiBsb29rIHZlcnkgY29uZnVzaW5nLiDgpLXgpLkg4KS14KWN4KSv4KSV4KWN4KSk4KS/IOCknOCliyDgpJXgpL/gpLjgpYAg4KS14KS/4KS34KSvIOCkr+CkviDgpJXgpL7gpLDgpY3gpK8g4KSu4KWH4KSCIOCkqOCkr+CkviDgpLngpYsgKOCkqOCljOCkuOCkv+CkluCkv+Ckr+CkvingpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiVG8gaW1wcm92ZSBza2lsbHMgdG8gbWF0Y2ggbmV3IGRlbWFuZHMiLCJvIjpbIlVwc2tpbGwiLCJVcGxpZnQiLCJVcGdyYWRlIiwiVXBkYXRlIl0sImMiOjEsInMiOiJNYW55IGVtcGxveWVlcyBuZWVkIHRvIHVwc2tpbGwgdG8ga2VlcCB1cCB3aXRoIG5ldyB0ZWNobm9sb2d5LiDgpKjgpIgg4KSc4KS84KSw4KWC4KSw4KSk4KWL4KSCIOCkleClhyDgpIXgpKjgpYHgpLjgpL7gpLAg4KSF4KSq4KSo4KWHIOCkleCljOCktuCksiDgpK/gpL4g4KS54KWB4KSo4KSwIOCkleCliyDgpKzgpZ3gpL7gpKjgpL7gpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiQSBwZXJzb24gd2hvIHNob3dzIHBlb3BsZSB0byB0aGVpciBzZWF0cyIsIm8iOlsiVXNoZXIiLCJHdWlkZSIsIkd1YXJkIiwiSmFuaXRvciJdLCJjIjoxLCJzIjoiVGhlIHVzaGVyIHNob3dlZCB1cyB0byBvdXIgc2VhdHMgaW4gdGhlIGRhcmsgY2luZW1hIGhhbGwuIOCkteCkuSDgpLXgpY3gpK/gpJXgpY3gpKTgpL8g4KSc4KWLIOCkpeCkv+Ckj+Ckn+CksCDgpK/gpL4g4KSa4KSw4KWN4KSaIOCkruClh+CkgiDgpLLgpYvgpJfgpYvgpIIg4KSV4KWLIOCkieCkqOCkleClgCDgpLjgpYDgpJ8g4KSk4KSVIOCksuClhyDgpJzgpL7gpKTgpL4g4KS54KWI4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IlRoZSBwcmFjdGljZSBvZiBsZW5kaW5nIG1vbmV5IGF0IHVucmVhc29uYWJseSBoaWdoIGludGVyZXN0IiwibyI6WyJCYW5raW5nIiwiTGVuZGluZyIsIlVzdXJ5IiwiVHJhZGluZyJdLCJjIjozLCJzIjoiU29tZSBjb3VudHJpZXMgaGF2ZSBzdHJpY3QgbGF3cyB0byBwcmV2ZW50IHVzdXJ5LiDgpIrgpIHgpJrgpYAg4KSU4KSwIOCkheCkqOClgeCkmuCkv+CkpCDgpKzgpY3gpK/gpL7gpJwg4KSm4KSwIOCkquCksCDgpKrgpYjgpLjgpYcg4KSm4KWH4KSo4KWHIOCkleCkviDgpLXgpY3gpK/gpL7gpKrgpL7gpLAgKOCkuOClguCkpuCkluCli+CksOClgCngpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiU29tZXRoaW5nIG5ldmVyIGRvbmUgb3Iga25vd24gYmVmb3JlIiwibyI6WyJVbmlxdWUiLCJVbnByZWNlZGVudGVkIiwiVW51c3VhbCIsIlVuZXhwZWN0ZWQiXSwiYyI6MiwicyI6IlRoZSBjb21wYW554oCZcyBncm93dGggdGhpcyB5ZWFyIGlzIGNvbXBsZXRlbHkgdW5wcmVjZWRlbnRlZC4g4KSc4KWLIOCkquCkueCksuClhyDgpJXgpK3gpYAg4KSoIOCkueClgeCkhiDgpLngpYsg4KSv4KS+IOCknOCkv+CkuOCkleClhyDgpKzgpL7gpLDgpYcg4KSu4KWH4KSCIOCkquCkueCksuClhyDgpJzgpL7gpKjgpJXgpL7gpLDgpYAg4KSoIOCkueCliyAo4KSF4KSt4KWC4KSk4KSq4KWC4KSw4KWN4KS1KeClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJBIG1ham9yIGNoYW5nZSBvciBkaXN0dXJiYW5jZSBlc3BlY2lhbGx5IG9uZSBjYXVzaW5nIGNvbmZ1c2lvbiIsIm8iOlsiVXBkYXRlIiwiVXB0aHJ1c3QiLCJVcGhlYXZhbCIsIlVwc3VyZ2UiXSwiYyI6MywicyI6IlRoZSBzdWRkZW4gcmVzaWduYXRpb24gb2YgdGhlIENFTyBjYXVzZWQgYSBtYXNzaXZlIHVwaGVhdmFsIGluIHRoZSBjb21wYW55LiDgpLjgpK7gpL7gpJwg4KSv4KS+IOCktuCkvuCkuOCkqCDgpLXgpY3gpK/gpLXgpLjgpY3gpKXgpL4g4KSu4KWH4KSCIOCkueCli+CkqOClhyDgpLXgpL7gpLLgpYAg4KSt4KS+4KSw4KWAIOCklOCksCDgpK3gpY3gpLDgpK7gpL/gpKQg4KSV4KSw4KSo4KWHIOCkteCkvuCksuClgCDgpIngpKXgpLIt4KSq4KWB4KSl4KSy4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IldvcmtpbmcgaW4gYSBqb2IgdGhhdCBkb2VzIG5vdCBmdWxseSB1c2Ugb25lJ3Mgc2tpbGxzIG9yIGFiaWxpdGllcyIsIm8iOlsiVW5kZXJlbXBsb3llZCIsIlVuZW1wbG95ZWQiLCJVcGdyYWRlZCIsIlVuaW5pdGlhdGVkIl0sImMiOjEsInMiOiJNYW55IGVuZ2luZWVyaW5nIGdyYWR1YXRlcyBhcmUgdW5kZXJlbXBsb3llZCwgd29ya2luZyBpbiBtYW51YWwgam9icy4g4KS14KS5IOCkuOCljeCkpeCkv+CkpOCkvyDgpJzgpLngpL7gpIEg4KS14KWN4KSv4KSV4KWN4KSk4KS/IOCkleClgCDgpK/gpYvgpJfgpY3gpK/gpKTgpL4g4KSV4KWHIOCkheCkqOClgeCkuOCkvuCksCDgpIngpLjgpYcg4KSV4KS+4KSuIOCkqOCkueClgOCkgiDgpK7gpL/gpLLgpKTgpL4gKOCkheCksuCljeCkqi3gpLDgpYvgpJzgpLzgpJfgpL7gpLAp4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IlRoZSBraWxsaW5nIG9mIG9uZSdzIHdpZmUiLCJvIjpbIk1hdHJpY2lkZSIsIkhvbWljaWRlIiwiVXhvcmljaWRlIiwiTWFyaXRpY2lkZSJdLCJjIjozLCJzIjoiSW4gdGhlIHRyYWdpYyBzdG9yeSwgdGhlIGtpbmcgd2FzIGRyaXZlbiB0byB1eG9yaWNpZGUuIOCkheCkquCkqOClgCDgpKrgpKTgpY3gpKjgpYAg4KSV4KWAIOCkueCkpOCljeCkr+CkviDgpJXgpLDgpKjgpYcg4KSV4KS+IOCkheCkquCksOCkvuCkp+ClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJJbXBvc3NpYmxlIHRvIHVuZGVyc3RhbmQiLCJvIjpbIlVucHJlY2VkZW50ZWQiLCJVbmludGVsbGlnaWJsZSIsIlVuaW50ZWxsaWdlbnQiLCJVbmluaXRpYXRlZCJdLCJjIjoyLCJzIjoiSGlzIGhhbmR3cml0aW5nIHdhcyBzbyBtZXNzeSB0aGF0IHRoZSBub3RlIHdhcyBjb21wbGV0ZWx5IHVuaW50ZWxsaWdpYmxlLiDgpLXgpLkg4KSs4KS+4KSkIOCkr+CkviDgpK3gpL7gpLfgpL4g4KSc4KWLIOCkrOCkv+CksuCljeCkleClgeCksiDgpLjgpK7gpJ0g4KSu4KWH4KSCIOCkqCDgpIbgpI/gpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiTm90IGNhcGFibGUgb2YgYmVpbmcgcHJvdmVkIGZhbHNlIiwibyI6WyJVbmxpbWl0ZWQiLCJVbmZhbHNpZmlhYmxlIiwiVW5jZXJ0YWluIiwiVHJ1ZSJdLCJjIjoyLCJzIjoiVGhlIHBoaWxvc29waGVyIGFyZ3VlZCB0aGF0IHNvbWUgcmVsaWdpb3VzIGJlbGllZnMgYXJlIHVuZmFsc2lmaWFibGUuIOCkkOCkuOCkviDgpLjgpL/gpKbgpY3gpKfgpL7gpILgpKQg4KSv4KS+IOCkrOCkvuCkpCDgpJzgpL/gpLjgpYcg4KSX4KSy4KSkIOCkuOCkv+CkpuCljeCkpyDgpJXgpLDgpKjgpL4g4KSo4KS+4KSu4KWB4KSu4KSV4KS/4KSoIOCkueCli+ClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJGdWxseSBhZ3JlZWQgdXBvbiBieSBhbGwiLCJvIjpbIlVuaWZvcm0iLCJVbml2ZXJzYWwiLCJVbmFuaW1vdXMiLCJVbmlxdWUiXSwiYyI6MywicyI6IlRoZSBib2FyZCBtZW1iZXJzIHJlYWNoZWQgYSB1bmFuaW1vdXMgZGVjaXNpb24uIOCkteCkuSDgpKjgpL/gpLDgpY3gpKPgpK8g4KSv4KS+IOCkteCkv+CkmuCkvuCksCDgpJzgpL/gpLjgpLjgpYcg4KS44KSt4KWAIOCksuCli+CklyDgpKrgpYLgpLDgpY3gpKPgpKTgpIMg4KS44KS54KSu4KSkIOCkueCli+CkguClpCIsInIiOiJCbGFja2Jvb2sgKCBNYXkgMjAyNiBFZGl0aW9uICkifSx7InEiOiJFeGlzdGluZyBvciBiZWluZyBldmVyeXdoZXJlIGF0IHRoZSBzYW1lIHRpbWUiLCJvIjpbIlVuYW5pbW91cyIsIlViaXF1aXRvdXMiLCJVbmlxdWUiLCJVbnVzdWFsIl0sImMiOjIsInMiOiJUb2RheSwgc21hcnRwaG9uZXMgYXJlIHViaXF1aXRvdXMgaW4gYWxtb3N0IGV2ZXJ5IHBhcnQgb2YgdGhlIHdvcmxkLiDgpLXgpLkg4KSa4KWA4KSc4KS8IOCknOCliyDgpI/gpJUg4KS54KWAIOCkuOCkruCkryDgpK7gpYfgpIIg4KS54KSwIOCknOCkl+CkuSDgpK7gpYzgpJzgpYLgpKYg4KS54KWLICjgpLjgpLDgpY3gpLXgpLXgpY3gpK/gpL7gpKrgpYAp4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9LHsicSI6IkJleW9uZCBvbmUncyBsZWdhbCBwb3dlciBvciBhdXRob3JpdHkiLCJvIjpbIkRlIGZhY3RvIiwiSW50cmEgdmlyZXMiLCJVbHRyYSB2aXJlcyIsIkRlIGp1cmUiXSwiYyI6MywicyI6IlRoZSBjb3VydCBydWxlZCB0aGF0IHRoZSBnb3Zlcm5tZW50J3MgYWN0aW9uIHdhcyB1bHRyYSB2aXJlcy4g4KSc4KSsIOCkleCli+CkiCDgpLjgpILgpLjgpY3gpKXgpL4g4KSv4KS+IOCkheCkp+Ckv+CkleCkvuCksOClgCDgpIXgpKrgpKjgpYAg4KSV4KS+4KSo4KWC4KSo4KWAIOCktuCkleCljeCkpOCkvyDgpJXgpYAg4KS44KWA4KSu4KS+IOCkuOClhyDgpKzgpL7gpLngpLAg4KSV4KS+4KSw4KWN4KSvIOCkleCksOCkpOCkviDgpLngpYjgpaQiLCJyIjoiQmxhY2tib29rICggTWF5IDIwMjYgRWRpdGlvbiApIn0seyJxIjoiUG9vcmx5IGVkdWNhdGVkIG9yIGlsbGl0ZXJhdGUiLCJvIjpbIlVubGV0dGVyZWQiLCJVbmx1Y2t5IiwiVW51c3VhbCIsIlVuaXF1ZSJdLCJjIjoxLCJzIjoiSW4gdGhlIDE5dGggY2VudHVyeSwgbWFueSBwZW9wbGUgaW4gdGhlIHZpbGxhZ2VzIHJlbWFpbmVkIHVubGV0dGVyZWQuIOCkteCkuSDgpLXgpY3gpK/gpJXgpY3gpKTgpL8g4KSc4KS/4KS44KWHIOCktuCkv+CkleCljeCkt+CkviDgpKgg4KSu4KS/4KSy4KWAIOCkueCliyDgpK/gpL4g4KSc4KWLIOCkheCkqOCkquClnSAoaWxsaXRlcmF0ZSkg4KS54KWL4KWkIiwiciI6IkJsYWNrYm9vayAoIE1heSAyMDI2IEVkaXRpb24gKSJ9XSwic291cmNlIjoiVSBXT1JEIC0gT1dTICggV09SRCBBREFBIFBERnMgKSIsImxpbmtzIjp7IndhIjoiaHR0cHM6Ly93aGF0c2FwcC5jb20vY2hhbm5lbC8wMDI5VmJDV0hsQUFlNVZpeWhvVGp5MjQiLCJ0ZyI6Imh0dHBzOi8vdC5tZS9TYXJrYXJpQWRhYSIsImxvZ28iOiJodHRwczovL2kuaWJiLmNvLzlIN3ltTnltL2ZpbGUtMDAwMDAwMDA5ZDMwNzIwOGIwZmU3OGUwYzRhNDI2ZGYucG5nIn19"))));
+        const _D = _E.questions; const _L = _E.links; const _S = _E.source;
+        let _idx=0, _ans={}, _isSub=false, _t=540, _popS=new Set();
+
+        const _sh = (a) => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a; };
+        _sh(_D);
+        _D.forEach(q => {
+            let combined = q.o.map((o,i)=>({o, c: i+1==q.c}));
+            _sh(combined);
+            q.o = combined.map(x=>x.o);
+            q.c = combined.findIndex(x=>x.c)+1;
+        });
+
+        const Engine = {
+            init: () => {
+                document.getElementById('mockLogo').src = _L.logo;
+                document.getElementById('logoLink').onclick = () => window.open(_L.wa, '_blank');
+                Engine.render();
+                setInterval(Engine.tick, 1000);
+            },
+            render: () => {
+                const q = _D[_idx];
+                let h = `<div class="q-label">Question ${_idx+1} / ${_D.length}</div>
+                <div class="q-scroll">
+                    <div class="q-text" style="font-family:'Outfit','Anek Devanagari'">${q.q}</div>
+                    <div class="source-tag">${_S}</div>
+                    <div class="options-grid">${q.o.map((o,i)=>`<div class="opt ${_ans[_idx]==i+1?'selected':''}" onclick="Engine.pick(${i+1})"><div class="opt-circle"></div>${o}</div>`).join('')}</div>
+                </div>`;
+                document.getElementById('qArea').innerHTML = h;
+                Engine.checkPop();
+            },
+            pick: (v) => { if(!_isSub){ _ans[_idx]=(_ans[_idx]==v?null:v); Engine.render(); } },
+            next: () => { if(_idx < _D.length-1){ _idx++; Engine.render(); } },
+            prev: () => { if(_idx > 0){ _idx--; Engine.render(); } },
+            tick: () => { if(!_isSub && _t > 0){ _t--; let m=Math.floor(_t/60), s=_t%60; document.getElementById('timer').innerText = (m<10?'0':'')+m+":"+(s<10?'0':'')+s; } },
+            toggleMode: () => {
+                document.body.classList.toggle('dark');
+                const isD = document.body.classList.contains('dark');
+                document.getElementById('modeIco').className = isD ? 'ph-bold ph-sun' : 'ph-bold ph-moon';
+            },
+            showSub: () => {
+                let ans = Object.keys(_ans).filter(k=>_ans[k]!==null).length;
+                document.getElementById('subAns').innerText = ans;
+                document.getElementById('subLeft').innerText = _D.length - ans;
+                document.getElementById('subModal').style.display = 'flex';
+            },
+            hideSub: () => document.getElementById('subModal').style.display = 'none',
+            submit: () => {
+                _isSub = true; Engine.hideSub();
+                document.getElementById('qArea').style.display = 'none';
+                document.getElementById('nav').style.display = 'none';
+                let c=0, w=0, u=0; _D.forEach((q,i)=>{ if(!_ans[i]) u++; else if(_ans[i]==q.c) c++; else w++; });
+                let h = `<div class="result-box">
+                    <div class="res-header">
+                        <h2 style="margin:0;font-weight:900;">Mock Completed</h2>
+                        <div class="res-grid">
+                            <div><div class="res-val">${c}</div><div class="res-lbl">CORRECT</div></div>
+                            <div><div class="res-val">${w}</div><div class="res-lbl">WRONG</div></div>
+                            <div><div class="res-val">${u}</div><div class="res-lbl">SKIPPED</div></div>
+                        </div>
+                    </div>
+                    <div class="dots-container">${_D.map((_,i)=>`<button class="dot ${!_ans[i]?'':(_ans[i]==_D[i].c?'correct':'wrong')}" onclick="Engine.anal(${i})">${i+1}</button>`).join('')}</div>
+                    <div class="footer-links">
+                        <a href="javascript:location.reload()" class="link-btn" style="background:#000">Retake Mock</a>
+                        <a href="${_L.wa}" target="_blank" class="link-btn" style="background:#25d366"><i class="ph-fill ph-whatsapp-logo"></i> WhatsApp Channel</a>
+                        <a href="${_L.tg}" target="_blank" class="link-btn" style="background:#0088cc"><i class="ph-fill ph-telegram-logo"></i> Telegram Channel</a>
+                    </div>
+                    <div style="margin-top:25px; font-weight:800; opacity:0.4; font-size:12px; letter-spacing:1px; font-family:'Outfit'">POWERED BY @SARKARIADAA</div>
+                </div>`;
+                document.getElementById('rArea').innerHTML = h;
+                document.getElementById('rArea').style.display = 'block';
+            },
+            anal: (i) => {
+                const q = _D[i], ua = _ans[i];
+                let h = `<div class="modal-head"><h3 style="margin:0;font-weight:900;">Analysis Q${i+1}</h3><i class="ph-bold ph-x-circle" style="font-size:32px;cursor:pointer;opacity:0.6" onclick="Engine.closeModal()"></i></div>
+                <div class="q-text" style="font-size:19px">${q.q}</div>
+                <div class="options-grid">${q.o.map((o,p)=>{
+                    let st = '';
+                    if(p+1==q.c) st = 'border-color:#34c759; background:rgba(52,199,89,0.1); color:#34c759;';
+                    else if(ua==p+1) st = 'border-color:#ff3b30; background:rgba(255,59,48,0.1); color:#ff3b30;';
+                    return `<div class="opt" style="${st}">${o}</div>`;
+                }).join('')}</div>
+                <div class="sol-box"><b>Explanation:</b><br><div style="margin-top:10px">${q.s}</div></div>`;
+                document.getElementById('mContent').innerHTML = h; document.getElementById('modal').style.display = 'flex';
+            },
+            closeModal: () => document.getElementById('modal').style.display = 'none',
+            checkPop: () => {
+                let p = Math.floor((_idx/_D.length)*100);
+                if((p==25 || p==60 || p==90) && !_popS.has(p)){
+                    _popS.add(p); const isW = Math.random() > 0.5;
+                    document.getElementById('popIco').className = isW ? "ph-fill ph-whatsapp-logo" : "ph-fill ph-telegram-logo";
+                    document.getElementById('popIco').style.color = isW ? "#25d366" : "#0088cc";
+                    document.getElementById('popTit').innerText = isW ? "WhatsApp Channel" : "Telegram Channel";
+                    document.getElementById('popBtn').href = isW ? _L.wa : _L.tg;
+                    document.getElementById('popBtn').style.background = isW ? "#25d366" : "#0088cc";
+                    document.getElementById('popUp').style.display = 'flex';
+                }
+            },
+            closePop: () => document.getElementById('popUp').style.display = 'none'
+        };
+        Engine.init();
+    </script>
+</body>
+</html>
